@@ -1,3 +1,40 @@
-<h1>
-  {{title}}
-</h1>
+<md-sidenav-container class="example-container">
+  <md-sidenav #sidenav class="example-sidenav">
+    Jolly good!
+  </md-sidenav>
+
+  <div class="wrapper">
+    <app-toolbar [sidenav]="sidenav"></app-toolbar>
+
+    <div class="content">
+      <app-alphabet class="" (newChar)="selectChar($event)"></app-alphabet>
+      <app-artists-list [list]="artistsList" class=""></app-artists-list>
+    </div>
+  </div>
+
+  <!--<form (ngSubmit)="onSubmit(heroForm)" #heroForm="ngForm">
+    <tr>
+      <td>
+        <md-input-container class="example-full-width">
+          <input class="form-control" id="name" [(ngModel)]="name" name="name" mdInput placeholder="First name">
+        </md-input-container>
+      </td>
+    </tr>
+
+    <button type="submit" md-raised-button>Submit</button>
+  </form>-->
+
+  <!--<table class="example-full-width" cellspacing="0">
+    <tr>
+      <td>
+        <md-input-container class="example-full-width">
+          <input mdInput placeholder="First name">
+        </md-input-container>
+      </td>
+    </tr>
+  </table>-->
+
+
+
+
+</md-sidenav-container>

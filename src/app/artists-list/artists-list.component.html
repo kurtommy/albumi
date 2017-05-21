@@ -1,0 +1,27 @@
+<md-select placeholder="Genere">
+  <md-option *ngFor="let genere of generes" [value]="genere.name">
+    {{ genere.name }}
+  </md-option>
+</md-select>
+
+<md-list>
+  <!--<h3 md-subheader>Notes</h3>
+  <md-list-item>
+    <md-icon md-list-icon>note</md-icon>
+    <h4 md-line>a</h4>
+    <p md-line> bb </p>
+  </md-list-item>
+  <md-divider></md-divider>
+  <h3 md-subheader>Notes</h3>
+  <md-list-item>
+    <md-icon md-list-icon>note</md-icon>
+    <h4 md-line>a</h4>
+    <p md-line> bb </p>
+  </md-list-item>
+  <md-divider></md-divider>-->
+
+  <md-list-item *ngFor="let artist of list">
+    <md-icon md-list-icon>note</md-icon>
+    <h4 md-line>{{artist.name}}</h4>
+  </md-list-item>
+</md-list>
