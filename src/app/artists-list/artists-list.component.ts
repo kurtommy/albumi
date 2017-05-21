@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-artists-list',
@@ -7,9 +7,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ArtistsListComponent implements OnInit {
   @Input() list;
-  constructor() { }
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.elementRef.nativeElement.scrollTop = 0;
+  }
 }

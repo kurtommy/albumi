@@ -38,7 +38,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    console.log('me');
     this._createSchemaBuilder();
     this._createTables();
     this._connectToDb();
@@ -46,8 +45,13 @@ export class AppComponent {
 
   selectChar(obj) {
     let char: string = obj.char;
-    const nextChar = char.substring(0,char.length - 1) +
-        String.fromCharCode(char.charCodeAt(char.length - 1) + 1).toUpperCase();
+    let nextChar: string;
+    if (char === '0') {
+      nextChar = '9';
+    } else {
+      nextChar = char.substring(0,char.length - 1) +
+          String.fromCharCode(char.charCodeAt(char.length - 1) + 1).toUpperCase();
+    }
 
     const artistTable = this.db.getSchema().table('Artist');
     char = char.toUpperCase();
@@ -70,6 +74,7 @@ export class AppComponent {
     this.schemaBuilder.createTable('Artist')
         .addColumn('id', lf.Type.INTEGER).addPrimaryKey(['id'], true)
         .addColumn('name', lf.Type.STRING)
+        .addColumn('spotify_uri', lf.Type.STRING)
         .addColumn('genere_id', lf.Type.INTEGER)
         .addForeignKey('genere_fk', {
           local: 'genere_id',
@@ -115,6 +120,7 @@ export class AppComponent {
               .orderBy(genereTable.name, lf.Order.ASC)
         ]).then(results => {
           if (results[0].length) {
+            // console.info('artists', results[0].length);
             resolve({artists: results[0], generes: results[1]});
           } else {
             reject('no artists');
@@ -162,10 +168,14 @@ export class AppComponent {
     const artistTable = this.db.getSchema().table('Artist');
     return new Promise((resolve) => {
       this.http
-        .get(`assets/lists/names.json`)
+        .get(`assets/data/artists.json`)
         .map(response => response.json())
         .subscribe((data) => {
-          const rows = data.map(item => artistTable.createRow({name: item.data, genere_id: 1}));
+          const rows = data.map(item => artistTable.createRow({
+            name: item.name,
+            spotify_uri: item.spotify_uri,
+            genere_id: 1
+          }));
           this.db.createTransaction().exec([
             this.db.insert().into(artistTable).values(rows)
           ]).then(() => {

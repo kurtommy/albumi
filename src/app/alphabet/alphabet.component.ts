@@ -7,7 +7,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class AlphabetComponent implements OnInit {
   @Output() newChar = new EventEmitter();
-  alphabet = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+  alphabet = '0abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
 
   constructor() { }
 
@@ -18,5 +18,4 @@ export class AlphabetComponent implements OnInit {
     console.info(char);
     this.newChar.emit({ char });
   }
-
 }

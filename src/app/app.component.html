@@ -8,7 +8,10 @@
 
     <div class="content">
       <app-alphabet class="" (newChar)="selectChar($event)"></app-alphabet>
-      <app-artists-list [list]="artistsList" class=""></app-artists-list>
+      <div class="genere-artists debugx">
+        <app-generes [list]="generes" class="debugx"></app-generes>
+        <app-artists-list [list]="artistsList" class="debugx"></app-artists-list>
+      </div>
     </div>
   </div>
 

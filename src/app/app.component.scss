@@ -10,6 +10,13 @@ md-sidenav-container {
   display: flex;
   flex: 1 1 auto;
 }
+
+.genere-artists {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
 .debug {
   border: solid 1px red;
 }

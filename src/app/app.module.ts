@@ -11,11 +11,12 @@ import { AppComponent } from './app.component';
 
 import {
   MdButtonModule, MdCheckboxModule, MdSidenavModule, MdListModule, MdInputModule, MdToolbarModule,
-  MdSelectModule} from '@angular/material';
+  MdSelectModule, MdMenuModule} from '@angular/material';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AlphabetComponent } from './alphabet/alphabet.component';
 import { ArtistsListComponent } from './artists-list/artists-list.component';
 import { GeneresComponent } from './generes/generes.component';
+import { ArtistMenuComponent } from './artist-menu/artist-menu.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { GeneresComponent } from './generes/generes.component';
     ToolbarComponent,
     AlphabetComponent,
     ArtistsListComponent,
-    GeneresComponent
+    GeneresComponent,
+    ArtistMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { GeneresComponent } from './generes/generes.component';
     MdSidenavModule,
     MdListModule,
     MdInputModule,
-    MdToolbarModule
+    MdToolbarModule,
+    MdMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

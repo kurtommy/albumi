@@ -1,3 +1,5 @@
-<p>
-  generes works!
-</p>
+<md-select placeholder="Genere">
+  <md-option *ngFor="let genere of list" [value]="genere.name">
+    {{ genere.name }}
+  </md-option>
+</md-select>
