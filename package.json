@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --aot -prod --base-href=albumi/",
+    "build": "ng build --aot -prod --base-href=/albumi/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
