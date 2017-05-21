@@ -67,7 +67,7 @@ export class AppComponent {
   }
 
   _createSchemaBuilder() {
-    this.schemaBuilder = lf.schema.create('albumi', 1);
+    this.schemaBuilder = lf.schema.create('albumi', 2);
   }
 
   _createTables() {
