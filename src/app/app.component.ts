@@ -162,7 +162,7 @@ export class AppComponent {
     const artistTable = this.db.getSchema().table('Artist');
     return new Promise((resolve) => {
       this.http
-        .get(`/assets/lists/names.json`)
+        .get(`assets/lists/names.json`)
         .map(response => response.json())
         .subscribe((data) => {
           const rows = data.map(item => artistTable.createRow({name: item.data, genere_id: 1}));
