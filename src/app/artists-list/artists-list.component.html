@@ -16,7 +16,9 @@ Found: {{list?.length}} artists
   <md-divider></md-divider>-->
 
   <md-list-item *ngFor="let artist of list">
-    <md-icon md-list-icon>note</md-icon>
+    <md-icon *ngIf="!artist.spotifyImg" md-list-icon>note</md-icon>
+    <img *ngIf="artist.spotifyImg" [src]="artist.spotifyImg" width="100px"/>
+
     <h4 md-line>{{artist.name}}</h4>
     <app-artist-menu [artist]="artist"></app-artist-menu>
   </md-list-item>

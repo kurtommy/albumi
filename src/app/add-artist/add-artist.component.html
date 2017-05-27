@@ -1,0 +1,37 @@
+<form (ngSubmit)="searchArtist(artistForm)" #artistForm="ngForm">
+  <tr>
+    <td>
+      <md-input-container class="example-full-width">
+        <input class="form-control" id="artistName" [(ngModel)]="artistName" name="artistName" mdInput placeholder="Artist">
+      </md-input-container>
+    </td>
+  </tr>
+
+  <button type="submit" md-raised-button>Search</button>
+</form>
+
+<hr>
+
+<h2>{{newArtist?.name}}</h2>
+
+<div *ngIf="newArtist?.spotifyImg">
+  {{newArtist?.spotifyImg}}
+  <img [src]="newArtist.spotifyImg" alt="{{newArtist.name}}">
+</div>
+<hr>
+
+<div>
+  <md-chip-list class="">
+    <md-chip *ngFor="let tag of tags"
+        selected="tag.selected"
+        color="{{(tag.selected) ? 'accent' : ''}}"
+        (click)="tag.selected = !tag.selected">
+      {{tag.name}} {{tag.selected}}
+    </md-chip>
+  </md-chip-list>
+</div>
+
+
+<div *ngIf="canSave">
+  <button md-raised-button (click)="saveArtist()">Save</button>
+</div>

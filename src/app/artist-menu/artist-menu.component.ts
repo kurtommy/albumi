@@ -13,7 +13,7 @@ export class ArtistMenuComponent implements OnInit {
   }
 
   openOnSpotify() {
-    window.location.href = this.artist.spotify_uri;
+    window.location.href = this.artist.spotifyUri;
   }
 
   delete() {

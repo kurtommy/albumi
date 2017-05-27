@@ -7,37 +7,9 @@
     <app-toolbar [sidenav]="sidenav"></app-toolbar>
 
     <div class="content">
-      <app-alphabet class="" (newChar)="selectChar($event)"></app-alphabet>
-      <div class="genere-artists debugx">
-        <app-generes [list]="generes" class="debugx"></app-generes>
-        <app-artists-list [list]="artistsList" class="debugx"></app-artists-list>
-      </div>
+      <router-outlet></router-outlet>
     </div>
+
+    <app-panel-toolbar></app-panel-toolbar>
   </div>
-
-  <!--<form (ngSubmit)="onSubmit(heroForm)" #heroForm="ngForm">
-    <tr>
-      <td>
-        <md-input-container class="example-full-width">
-          <input class="form-control" id="name" [(ngModel)]="name" name="name" mdInput placeholder="First name">
-        </md-input-container>
-      </td>
-    </tr>
-
-    <button type="submit" md-raised-button>Submit</button>
-  </form>-->
-
-  <!--<table class="example-full-width" cellspacing="0">
-    <tr>
-      <td>
-        <md-input-container class="example-full-width">
-          <input mdInput placeholder="First name">
-        </md-input-container>
-      </td>
-    </tr>
-  </table>-->
-
-
-
-
 </md-sidenav-container>
