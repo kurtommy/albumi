@@ -56,7 +56,12 @@ import { PanelArtistsListComponent } from './panel-artists-list/panel-artists-li
     MdMenuModule,
     MdChipsModule
   ],
-  providers: [services.DbService, services.SpotifyService],
+  providers: [
+    services.DbService,
+    services.SpotifyService,
+    services.ArtistService,
+    services.TagService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

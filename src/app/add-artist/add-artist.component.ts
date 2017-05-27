@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SpotifyService, DbService } from '../services/index';
+import { SpotifyService, ArtistService, TagService } from '../services/index';
 
 @Component({
   selector: 'app-add-artist',
@@ -13,7 +13,7 @@ export class AddArtistComponent implements OnInit {
   tags;
   canSave = false;
 
-  constructor(private spotify: SpotifyService, private db: DbService) { }
+  constructor(private spotifyS: SpotifyService, private artistS: ArtistService, private tagS: TagService) { }
 
   ngOnInit() {
   }
@@ -23,7 +23,7 @@ export class AddArtistComponent implements OnInit {
     const artistName = form.value.artistName;
     if (artistName) {
       this.animate = true;
-      this.spotify.searchArtist(artistName)
+      this.spotifyS.searchArtist(artistName)
         .subscribe(response => {
           console.info(response);
           let spotifyArtist = this._parseResponse(response);
@@ -48,12 +48,18 @@ export class AddArtistComponent implements OnInit {
   }
 
   saveArtist() {
-    // Add selected tags
-    this.newArtist.tags = this.tags.filter(tag => tag.selected).map(tag => tag.name);
-    console.info(this.newArtist);
-    this.db.insertArtist(this.newArtist)
+    this.artistS.insertArtist(this.newArtist)
       .then(artist => {
-        console.info(artist[0][0]);
+        console.info(artist);
+        // If saved and there are tags save tags
+        const tags = this.tags.filter(tag => tag.selected).map(tag => tag.name);
+        if (tags.length) {
+          this.tagS.insertTags(tags)
+            .then(tagsToLink => {
+              console.info('tagsToLink', tagsToLink);
+              this.artistS.linkTags(artist, tagsToLink);
+            });
+        }
       });
   }
 

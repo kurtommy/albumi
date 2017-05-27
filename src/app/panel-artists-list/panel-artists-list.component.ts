@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DbService } from '../services/index';
+import { DbService, ArtistService } from '../services/index';
 
 
 @Component({
@@ -11,15 +11,15 @@ export class PanelArtistsListComponent implements OnInit {
   artistsList;
   obs = [];
 
-  constructor(private db: DbService) { }
+  constructor(private dbS: DbService, private artistS: ArtistService) { }
 
   ngOnInit() {
     this.obs.push(
-      this.db.dbConnection.subscribe((db) => {
-        this.db.getArtistsBetweenChars('A', 'B')
+      this.dbS.dbConnection.subscribe((db) => {
+        this.artistS.getArtistsBetweenChars('A', 'B')
           .then(artists => this.artistsList = artists);
       })
-    )
+    );
   }
 
   selectChar(obj) {
@@ -32,7 +32,7 @@ export class PanelArtistsListComponent implements OnInit {
         String.fromCharCode(char.charCodeAt(char.length - 1) + 1).toUpperCase();
     }
 
-    this.db.getArtistsBetweenChars(char, nextChar)
+    this.artistS.getArtistsBetweenChars(char, nextChar)
       .then(artists => this.artistsList = artists);
   }
   ngOnDestroy() {

@@ -6,6 +6,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 @Injectable()
 export class DbService {
   db;
+  artistTable;
+  tagTable;
+  tagArtistTable;
   dbConnection = new ReplaySubject();
   schemaBuilder: lf.schema.Builder;
 
@@ -42,71 +45,9 @@ export class DbService {
 
   // GET functions
 
-  getArtistsBetweenChars(char, nextChar) {
-    return new Promise((resolve) => {
-      const artistTable = this.db.getSchema().table('Artist');
-      char = char.toUpperCase();
-      this.db.createTransaction().exec([
-        this.db.select()
-          .from(artistTable)
-          .where(lf.op.and(artistTable.name.gte(char), artistTable.name.lt(nextChar)))
-          .orderBy(artistTable.name, lf.Order.ASC)
-      ]).then(artists => {
-        console.log(artists[0].length);
-        resolve(artists[0]);
-        // this.artistsList = artists[0];
-      });
-    });
-  }
 
-  getTags() {
-    const tagTable = this.db.getSchema().table('Tag');
-    return new Promise((resolve, reject) => {
-      this.db.select()
-          .from(tagTable)
-          .orderBy(tagTable.name, lf.Order.ASC)
-          .exec()
-          .then(results => resolve(results));
-    });
-  }
 
-  // Insert functions
-  insertArtist(artist) {
-    const Artist = this.db.getSchema().table('Artist');
-    const newArtist = {
-      name: artist.name,
-      spotifyImg: artist.spotifyImg || null,
-      spotifyUri: artist.spotifyUri || null
-    };
 
-    return this.db.createTransaction().exec([
-      this.db.insert().into(Artist).values([
-        Artist.createRow(newArtist)
-      ])
-    ])
-    .then((insertedArtist) => {
-      // Add tags
-      this._insertArtistTags(artist);
-      return insertedArtist;
-    });
-  }
-
-  _insertArtistTags(artist) {
-    if (artist.tags && artist.tags.length) {
-      const Tag = this.db.getSchema().table('Tag');
-      // create tag // check if exist
-      const newTags = artist.tags.map(tag => {
-        return Tag.createRow({ name: tag });
-      });
-      return this.db.createTransaction().exec([
-        this.db.insert().into(Tag).values(newTags)
-      ])
-      .then(() => {
-        console.info('tags added');
-      });
-      // Add Artist Tag relation
-    }
-  }
 
   _createSchemaBuilder() {
     this.schemaBuilder = lf.schema.create('albumi', 2);
@@ -146,13 +87,15 @@ export class DbService {
   _connectToDb() {
     return this.schemaBuilder.connect({ storeType: lf.schema.DataStoreType.INDEXED_DB }).then((db) => {
       this.db = db;
+      this.artistTable = this.db.getSchema().table('Artist');
+      this.tagTable = this.db.getSchema().table('Tag');
+      this.tagArtistTable = this.db.getSchema().table('TagArtist');
     });
   }
 
   _checkArtists() {
-    const artistTable = this.db.getSchema().table('Artist');
     return new Promise<any>((resolve, reject) => {
-      this.db.select().from(artistTable).limit(1).exec()
+      this.db.select().from(this.artistTable).limit(1).exec()
         .then((artist) => resolve(artist));
     });
   }
@@ -166,55 +109,32 @@ export class DbService {
   }
 
   _insertTags() {
-    const tagTable = this.db.getSchema().table('Tag');
     const tags = ['Pop', 'Chill', 'Hip h', 'Latino', 'Electro', 'Dance', 'Rock', 'Indie', 'Jazz', 'Soul',
       'Classical', 'Kids', 'Reggae', 'Blues', 'Funk', 'Metal', 'Punk', 'RnB', 'Folk', 'Country'];
-    const tagsRows = tags.map(tag => tagTable.createRow({ name: tag }));
+    const tagsRows = tags.map(tag => this.tagTable.createRow({ name: tag }));
 
     return new Promise(resolve => {
       this.db.createTransaction().exec([
-        this.db.insert().into(tagTable).values(tagsRows)
+        this.db.insert().into(this.tagTable).values(tagsRows)
       ])
       .then(() => resolve());
-      // .then(() => {
-      //   return this.db.createTransaction().exec([
-      //     this.db.select()
-      //       .from(tagTable)
-      //       .orderBy(tagTable.name, lf.Order.ASC)
-      //   ]);
-      // }).then((results) => {
-      //   console.log('tags', results[0]);
-      //   resolve(results[0]);
-      // });
     });
   }
 
   _insertArtists() {
-    const artistTable = this.db.getSchema().table('Artist');
     return new Promise((resolve) => {
       this.http
         .get(`assets/data/artists.json`)
         .map(response => response.json())
         .subscribe((data) => {
-          const rows = data.map(item => artistTable.createRow({
+          const rows = data.map(item => this.artistTable.createRow({
             name: item.name,
             spotify_uri: item.spotify_uri
           }));
           this.db.createTransaction().exec([
-            this.db.insert().into(artistTable).values(rows)
+            this.db.insert().into(this.artistTable).values(rows)
           ])
           .then(() => resolve());
-          // .then(() => {
-          //   return this.db.createTransaction().exec([
-          //     this.db.select()
-          //       .from(artistTable)
-          //       .where(artistTable.name.between('A', 'B'))
-          //       .orderBy(artistTable.name, lf.Order.ASC)
-          //   ]);
-          // }).then((results) => {
-          //   console.log('artists', results[0]);
-          //   resolve(results[0]);
-          // });
         });
     });
   }

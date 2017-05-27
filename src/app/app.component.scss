@@ -9,6 +9,8 @@ md-sidenav-container {
 .content {
   display: flex;
   flex: 1 1 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .debug {
