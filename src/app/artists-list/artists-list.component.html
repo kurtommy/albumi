@@ -1,25 +1,8 @@
-Found: {{list?.length}} artists
 <md-list>
-  <!--<h3 md-subheader>Notes</h3>
-  <md-list-item>
-    <md-icon md-list-icon>note</md-icon>
-    <h4 md-line>a</h4>
-    <p md-line> bb </p>
-  </md-list-item>
-  <md-divider></md-divider>
-  <h3 md-subheader>Notes</h3>
-  <md-list-item>
-    <md-icon md-list-icon>note</md-icon>
-    <h4 md-line>a</h4>
-    <p md-line> bb </p>
-  </md-list-item>
-  <md-divider></md-divider>-->
-
   <md-list-item *ngFor="let artist of list">
     <md-icon *ngIf="!artist.spotifyImg" md-list-icon>note</md-icon>
-    <img *ngIf="artist.spotifyImg" [src]="artist.spotifyImg" width="100px"/>
-
-    <h4 md-line>{{artist.name}}</h4>
-    <app-artist-menu [artist]="artist"></app-artist-menu>
+    <img *ngIf="artist.spotifyImg" [src]="artist.spotifyImg"/>
+    <h4>{{artist.name}}</h4>
+    <app-artist-menu [artist]="artist" (onDelete)="deleteArtist($event)"></app-artist-menu>
   </md-list-item>
 </md-list>

@@ -10,34 +10,63 @@ import { DbService, ArtistService } from '../services/index';
 export class PanelArtistsListComponent implements OnInit {
   artistsList;
   obs = [];
+  showTags = false;
+  selectedTags = [];
+  betweenChars = ['A', 'B'];
 
   constructor(private dbS: DbService, private artistS: ArtistService) { }
 
   ngOnInit() {
     this.obs.push(
       this.dbS.dbConnection.subscribe((db) => {
-        this.artistS.getArtistsBetweenChars('A', 'B')
-          .then(artists => this.artistsList = artists);
+        this._updateArtistsList()
+          .then(artists => {
+            console.log(artists);
+            // this.artistsList = artists
+          });
       })
     );
   }
 
   selectChar(obj) {
     const char: string = obj.char;
-    let nextChar: string;
-    if (char === '0') {
-      nextChar = '9';
+    if (char === 'All') {
+      this.betweenChars = [];
     } else {
-      nextChar = char.substring(0, char.length - 1) +
-        String.fromCharCode(char.charCodeAt(char.length - 1) + 1).toUpperCase();
+      this.betweenChars = [char , this._getNextChar(char)];
     }
-
-    this.artistS.getArtistsBetweenChars(char, nextChar)
-      .then(artists => this.artistsList = artists);
+    this._updateArtistsList();
   }
+
+  updateTagsFilter(obj) {
+    console.log(obj);
+    this.selectedTags = obj.tags;
+    this._updateArtistsList();
+  }
+
+  deleteArtist(obj) {
+    this.artistS.deleteArtist(obj.artist)
+      .then(() => {
+        this._updateArtistsList();
+      })
+  }
+
+  _updateArtistsList() {
+    return this.artistS.getArtists({
+        tags: this.selectedTags,
+        betweenChars: this.betweenChars
+      }).then(artists => this.artistsList = artists);
+  }
+
+  _getNextChar(char) {
+    if (char === '0') {
+      return '9';
+    }
+    return char.substring(0, char.length - 1) +
+      String.fromCharCode(char.charCodeAt(char.length - 1) + 1).toUpperCase();
+  }
+
   ngOnDestroy() {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     console.info('destroy artists list panel');
     this.obs.forEach(ob => {
       ob.unsubscribe();

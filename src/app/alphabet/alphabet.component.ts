@@ -8,17 +8,20 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./alphabet.component.scss']
 })
 export class AlphabetComponent implements OnInit {
-  debouncer = new Subject();
-
   @Output() newChar = new EventEmitter();
+  debouncer = new Subject();
+  selectedChar = 'A';
+  alphabet;
 
-  alphabet = '0abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
-
-  constructor() { }
+  constructor() {
+    this.alphabet = '0abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+    this.alphabet.unshift('All');
+  }
 
   ngOnInit() {
-    this.debouncer.debounceTime(200).subscribe((char) => {
+    this.debouncer.debounceTime(200).subscribe((char: any) => {
       // console.info(char);
+      this.selectedChar = char;
       this.newChar.emit({ char });
     });
   }

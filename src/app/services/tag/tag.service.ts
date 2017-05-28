@@ -57,10 +57,10 @@ export class TagService {
   getAllTags() {
     return new Promise((resolve, reject) => {
       this.dbS.db.select()
-          .from(this.dbS.tagTable)
-          .orderBy(this.dbS.tagTable.name, lf.Order.ASC)
-          .exec()
-          .then(results => resolve(results));
+        .from(this.dbS.tagTable)
+        .orderBy(this.dbS.tagTable.name, lf.Order.ASC)
+        .exec()
+        .then(results => resolve(results));
     });
   }
 }

@@ -72,14 +72,14 @@ export class DbService {
       .addForeignKey('tagIdFk', {
         local: 'tagId',
         ref: 'Tag.id',
-        action: lf.ConstraintAction.RESTRICT,
-        timing: lf.ConstraintTiming.DEFERRABLE
+        action: lf.ConstraintAction.CASCADE,
+        timing: lf.ConstraintTiming.IMMEDIATE
       })
       .addForeignKey('artistIdFk', {
         local: 'artistId',
         ref: 'Artist.id',
-        action: lf.ConstraintAction.RESTRICT,
-        timing: lf.ConstraintTiming.DEFERRABLE
+        action: lf.ConstraintAction.CASCADE,
+        timing: lf.ConstraintTiming.IMMEDIATE
       });
     // console.info(this.schemaBuilder.getSchema().tables());
   }

@@ -9,7 +9,7 @@ import { HttpModule } from '@angular/http';
 
 import {
   MdButtonModule, MdCheckboxModule, MdSidenavModule, MdListModule, MdInputModule, MdToolbarModule,
-  MdSelectModule, MdMenuModule, MdChipsModule, MdIconModule} from '@angular/material';
+  MdSelectModule, MdMenuModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdCardModule} from '@angular/material';
 
 import { RoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
@@ -25,6 +25,7 @@ import { PanelAddArtistComponent } from './panel-add-artist/panel-add-artist.com
 // Services
 import * as services from './services/index';
 import { PanelArtistsListComponent } from './panel-artists-list/panel-artists-list.component';
+import { TagsComponent } from './tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { PanelArtistsListComponent } from './panel-artists-list/panel-artists-li
     PanelToolbarComponent,
     AddArtistComponent,
     PanelAddArtistComponent,
-    PanelArtistsListComponent
+    PanelArtistsListComponent,
+    TagsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +56,9 @@ import { PanelArtistsListComponent } from './panel-artists-list/panel-artists-li
     MdInputModule,
     MdToolbarModule,
     MdMenuModule,
-    MdChipsModule
+    MdChipsModule,
+    MdProgressSpinnerModule,
+    MdCardModule
   ],
   providers: [
     services.DbService,

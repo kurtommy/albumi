@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-artists-list',
@@ -7,6 +7,8 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef } from '
 })
 export class ArtistsListComponent implements OnInit {
   @Input() list;
+  @Output() onDelete = new EventEmitter();
+
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit() {
@@ -14,5 +16,9 @@ export class ArtistsListComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.elementRef.nativeElement.scrollTop = 0;
+  }
+
+  deleteArtist(artist) {
+    this.onDelete.emit(artist);
   }
 }

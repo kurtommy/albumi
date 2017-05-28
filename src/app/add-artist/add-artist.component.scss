@@ -1,0 +1,58 @@
+:host {
+  padding: 20px;
+  display: block;
+}
+form {
+  display: flex;
+  align-items: center;
+  md-input-container {
+    flex: 1 1 auto;
+  }
+  button {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  md-progress-spinner {
+    width: 20px;
+    height: 20px;
+  }
+  .spinner {
+    width: 20px;
+  }
+}
+
+.next-prev-artist {
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+
+md-card-header {
+  display: flex;
+  align-content: center;
+  img {
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+  }
+  h2 {
+    margin-left: 10px;
+    font-size: 18px;
+  }
+}
+
+md-chip {
+  margin-top: 8px !important;
+}
+md-chip + md-chip {
+  margin-right: 8px !important;
+}
+
+.custom-tag {
+  padding: 3px 3px 0px 3px !important;
+}
+
+
+

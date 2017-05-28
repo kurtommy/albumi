@@ -8,10 +8,13 @@ import { SpotifyService, ArtistService, TagService } from '../services/index';
 })
 export class AddArtistComponent implements OnInit {
   artistName;
-  animate;
-  newArtist: any = {};
+  spotifyFetching = false;
+  newArtists: any = [];
+  artistIndex = 0;
   tags;
   canSave = false;
+  showAddCustomTag = false;
+  customTag = '';
 
   constructor(private spotifyS: SpotifyService, private artistS: ArtistService, private tagS: TagService) { }
 
@@ -22,37 +25,38 @@ export class AddArtistComponent implements OnInit {
     console.info(form.value);
     const artistName = form.value.artistName;
     if (artistName) {
-      this.animate = true;
+      this.spotifyFetching = true;
       this.spotifyS.searchArtist(artistName)
         .subscribe(response => {
           console.info(response);
-          let spotifyArtist = this._parseResponse(response);
-          console.info(spotifyArtist);
+          this.newArtists = this._parseResponse(response);
+          console.info(this.newArtists);
 
           // Capitalize the name
-          this.newArtist.name = artistName.charAt(0).toUpperCase() + artistName.slice(1);
-          if (spotifyArtist.spotifyImg) {
-            this.newArtist.spotifyImg = spotifyArtist.spotifyImg;
-          }
-          if (spotifyArtist.spotifyUri) {
-            this.newArtist.spotifyUri = spotifyArtist.spotifyUri;
-          }
+          // this.newArtist.name = artistName.charAt(0).toUpperCase() + artistName.slice(1);
+          // if (spotifyArtist.spotifyImg) {
+          //   this.newArtist.spotifyImg = spotifyArtist.spotifyImg;
+          // }
+          // if (spotifyArtist.spotifyUri) {
+          //   this.newArtist.spotifyUri = spotifyArtist.spotifyUri;
+          // }
 
           // show founded tags
-          this.tags = spotifyArtist.tags;
+          // this.tags = spotifyArtist.tags;
 
-          this.animate = false;
+          this.spotifyFetching = false;
           this.canSave = true;
         });
     }
   }
 
   saveArtist() {
-    this.artistS.insertArtist(this.newArtist)
+    const newArtist = this.newArtists[this.artistIndex];
+    this.artistS.insertArtist(newArtist)
       .then(artist => {
         console.info(artist);
         // If saved and there are tags save tags
-        const tags = this.tags.filter(tag => tag.selected).map(tag => tag.name);
+        const tags = newArtist.tags.filter(tag => tag.selected).map(tag => tag.name);
         if (tags.length) {
           this.tagS.insertTags(tags)
             .then(tagsToLink => {
@@ -60,24 +64,33 @@ export class AddArtistComponent implements OnInit {
               this.artistS.linkTags(artist, tagsToLink);
             });
         }
+        this.newArtists = [];
+        this.artistIndex = 0;
+        this.artistName = '';
+      }, reason => {
+        console.error('artist already present', reason);
       });
+  }
+
+  addCustomTag() {
+    this.newArtists[this.artistIndex].tags.push({name: this.customTag, selected: true});
+    this.showAddCustomTag = false;
+    this.customTag = '';
   }
 
   _parseResponse(response) {
     if (response.artists.length === 0) {
       return;
     }
-    const artist = response.artists.items[0];
-    const imgIndex = (artist.images.length - 2 >= 0) ? artist.images.length - 2 : artist.images.length - 1;
-    const ret = {
-      tags: artist.genres.map(tag => ({ name: tag, selected: false })),
-      spotifyImg: artist.images[imgIndex].url,
-      spotifyUri: artist.uri
-    };
+    const ret = response.artists.items.map(artist => {
+      const imgIndex =  (artist.images.length) ? artist.images.length - 1 : -1;
+      return {
+        name: artist.name.charAt(0).toUpperCase() + artist.name.slice(1),
+        tags: artist.genres.map(tag => ({ name: tag, selected: false })),
+        spotifyImg: (imgIndex >= 0) ? artist.images[imgIndex].url : '',
+        spotifyUri: artist.uri
+      };
+    });
     return ret;
-  }
-
-  _addSelectedTagsToDb() {
-
   }
 }

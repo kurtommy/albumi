@@ -1,4 +1,14 @@
 <app-alphabet class="" (newChar)="selectChar($event)"></app-alphabet>
 <div class="genere-artists debugx">
-  <app-artists-list [list]="artistsList" class="debugx"></app-artists-list>
+  <div class="filter-bar">
+    <div class="list-stats">Founded: {{artistsList?.length}} artists</div>
+    <button md-button (click)="showTags = !showTags">
+      <md-icon [ngClass]="{'open': showTags}">filter_list</md-icon>
+    </button>
+  </div>
+  <app-tags *ngIf="showTags" (onTagsChange)="updateTagsFilter($event)"></app-tags>
+  <app-artists-list
+      *ngIf="true || !showTags"
+      [list]="artistsList"
+      (onDelete)="deleteArtist($event)"></app-artists-list>
 </div>

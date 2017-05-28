@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { ArtistService } from '../services';
 
 @Component({
   selector: 'app-artist-menu',
@@ -7,7 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ArtistMenuComponent implements OnInit {
   @Input() artist;
-  constructor() { }
+  @Output() onDelete = new EventEmitter();
+
+
+  constructor(private artistS: ArtistService) { }
 
   ngOnInit() {
   }
@@ -16,7 +20,15 @@ export class ArtistMenuComponent implements OnInit {
     window.location.href = this.artist.spotifyUri;
   }
 
-  delete() {
+  openOnYoutube() {
+    window.open(`https://www.youtube.com/results?search_query=${this.artist.name}`);
+  }
 
+  openOnLastFm() {
+    window.open(`https://www.last.fm/search?q=${this.artist.name}`);
+  }
+
+  deleteArtist() {
+    this.onDelete.emit({ artist: this.artist })
   }
 }

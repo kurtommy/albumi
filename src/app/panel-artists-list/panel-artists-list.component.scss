@@ -7,3 +7,20 @@
   flex-direction: column;
   flex: 1 1 auto;
 }
+.filter-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+div {
+  flex: 1 1 auto;
+}
+.list-stats {
+  padding-left: 8px;
+}
+md-icon {
+  transition: all .2s linear;
+  &.open {
+    transform: rotate(180deg);
+  }
+}

@@ -1,11 +1,3 @@
-:host {
-  color: red;
-  justify-content: space-around !important;
-  md-toolbar-row {
-  justify-content: space-between !important;
-}
-
-}
-.mat-toolbar .mat-toolbar-row {
-  justify-content: space-between !important;
+button {
+  flex: 1 1 auto;
 }
