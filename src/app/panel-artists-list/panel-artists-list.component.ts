@@ -48,7 +48,7 @@ export class PanelArtistsListComponent implements OnInit {
     this.artistS.deleteArtist(obj.artist)
       .then(() => {
         this._updateArtistsList();
-      })
+      });
   }
 
   _updateArtistsList() {
