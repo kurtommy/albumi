@@ -9,7 +9,11 @@ import { HttpModule } from '@angular/http';
 
 import {
   MdButtonModule, MdCheckboxModule, MdSidenavModule, MdListModule, MdInputModule, MdToolbarModule,
-  MdSelectModule, MdMenuModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdCardModule} from '@angular/material';
+  MdSelectModule, MdMenuModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdCardModule,
+  MdDialogModule } from '@angular/material';
+
+// Services
+import * as services from './services/index';
 
 import { RoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
@@ -21,10 +25,7 @@ import { ArtistMenuComponent } from './artist-menu/artist-menu.component';
 import { PanelToolbarComponent } from './panel-toolbar/panel-toolbar.component';
 import { AddArtistComponent } from './add-artist/add-artist.component';
 import { PanelAddArtistComponent } from './panel-add-artist/panel-add-artist.component';
-
-// Services
-import * as services from './services/index';
-import { PanelArtistsListComponent } from './panel-artists-list/panel-artists-list.component';
+import { PanelArtistsListComponent, DeleteArtistDialog } from './panel-artists-list/panel-artists-list.component';
 import { TagsComponent } from './tags/tags.component';
 
 @NgModule({
@@ -39,7 +40,11 @@ import { TagsComponent } from './tags/tags.component';
     AddArtistComponent,
     PanelAddArtistComponent,
     PanelArtistsListComponent,
-    TagsComponent
+    TagsComponent,
+    DeleteArtistDialog
+  ],
+  entryComponents: [
+    DeleteArtistDialog
   ],
   imports: [
     BrowserModule,
@@ -58,7 +63,8 @@ import { TagsComponent } from './tags/tags.component';
     MdMenuModule,
     MdChipsModule,
     MdProgressSpinnerModule,
-    MdCardModule
+    MdCardModule,
+    MdDialogModule
   ],
   providers: [
     services.DbService,

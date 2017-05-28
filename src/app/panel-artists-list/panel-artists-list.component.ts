@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DbService, ArtistService } from '../services/index';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class PanelArtistsListComponent implements OnInit {
   selectedTags = [];
   betweenChars = ['A', 'B'];
 
-  constructor(private dbS: DbService, private artistS: ArtistService) { }
+  constructor(private dbS: DbService, private artistS: ArtistService, public dialog: MdDialog) { }
 
   ngOnInit() {
     this.obs.push(
@@ -44,8 +45,18 @@ export class PanelArtistsListComponent implements OnInit {
     this._updateArtistsList();
   }
 
-  deleteArtist(obj) {
-    this.artistS.deleteArtist(obj.artist)
+
+  confirmDeleteArtist(artist) {
+    const dialog = this.dialog.open(DeleteArtistDialog, { data: artist });
+    dialog.afterClosed().subscribe(artistToDelete => {
+      if (artistToDelete) {
+        this.deleteArtist(artistToDelete);
+      }
+    });
+  }
+
+  deleteArtist(artist) {
+    this.artistS.deleteArtist(artist)
       .then(() => {
         this._updateArtistsList();
       });
@@ -72,4 +83,12 @@ export class PanelArtistsListComponent implements OnInit {
       ob.unsubscribe();
     });
   }
+}
+
+@Component({
+  selector: 'dialog-delete-artist',
+  templateUrl: './dialog-delete-artist.html'
+})
+export class DeleteArtistDialog {
+  constructor(public dialogRef: MdDialogRef<DeleteArtistDialog>, @Inject(MD_DIALOG_DATA) public data: any) {}
 }

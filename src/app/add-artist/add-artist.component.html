@@ -26,8 +26,7 @@
     </md-card-header>
 
     <md-card-content>
-      {{showAddCustomTag}}//
-      <md-chip-list class="">
+      <md-chip-list>
         <md-chip *ngFor="let tag of newArtists[artistIndex].tags"
             [selected]="tag.selected"
             [color]="'accent'"

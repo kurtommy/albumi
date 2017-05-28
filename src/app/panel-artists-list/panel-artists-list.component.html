@@ -10,5 +10,5 @@
   <app-artists-list
       *ngIf="true || !showTags"
       [list]="artistsList"
-      (onDelete)="deleteArtist($event)"></app-artists-list>
+      (onDelete)="confirmDeleteArtist($event)"></app-artists-list>
 </div>

@@ -31,4 +31,8 @@ export class ArtistMenuComponent implements OnInit {
   deleteArtist() {
     this.onDelete.emit({ artist: this.artist })
   }
+
+  editArtist() {
+    console.info('todo');
+  }
 }
