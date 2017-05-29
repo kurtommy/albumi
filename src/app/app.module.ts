@@ -10,7 +10,7 @@ import { HttpModule } from '@angular/http';
 import {
   MdButtonModule, MdCheckboxModule, MdSidenavModule, MdListModule, MdInputModule, MdToolbarModule,
   MdSelectModule, MdMenuModule, MdChipsModule, MdIconModule, MdProgressSpinnerModule, MdCardModule,
-  MdDialogModule } from '@angular/material';
+  MdDialogModule, MdProgressBarModule } from '@angular/material';
 
 // Services
 import * as services from './services/index';
@@ -27,6 +27,7 @@ import { AddArtistComponent } from './add-artist/add-artist.component';
 import { PanelAddArtistComponent } from './panel-add-artist/panel-add-artist.component';
 import { PanelArtistsListComponent, DeleteArtistDialog } from './panel-artists-list/panel-artists-list.component';
 import { TagsComponent } from './tags/tags.component';
+import { PanelImportArtistsComponent } from './panel-import-artists/panel-import-artists.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { TagsComponent } from './tags/tags.component';
     PanelAddArtistComponent,
     PanelArtistsListComponent,
     TagsComponent,
-    DeleteArtistDialog
+    DeleteArtistDialog,
+    PanelImportArtistsComponent
   ],
   entryComponents: [
     DeleteArtistDialog
@@ -64,7 +66,8 @@ import { TagsComponent } from './tags/tags.component';
     MdChipsModule,
     MdProgressSpinnerModule,
     MdCardModule,
-    MdDialogModule
+    MdDialogModule,
+    MdProgressBarModule
   ],
   providers: [
     services.DbService,
