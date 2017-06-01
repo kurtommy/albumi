@@ -49,6 +49,24 @@ export class ArtistService {
 
   // Insert functions
   insertArtist(artist) {
+    // return new Promise(resolve => {
+    //   const newArtist = {
+    //           name: artist.name,
+    //           spotifyImg: artist.spotifyImg || null,
+    //           spotifyUri: artist.spotifyUri || null
+    //         };
+
+    //         this.dbS.db.createTransaction().exec([
+    //           this.dbS.db.insert().into(this.dbS.artistTable).values([
+    //             this.dbS.artistTable.createRow(newArtist),
+    //             // this.dbS.artistTable.createRow({
+    //             //   name: 'fake',
+    //             //   spotifyUri: 'asd'
+    //             // })
+    //           ])
+    //         ])
+    //         .then(insertedArtist => resolve(insertedArtist[0][0]));
+    // })
     // Check if the artist already exist in DB
     return new Promise((resolve, reject) => {
       this.getArtistByName(artist.name)
@@ -71,6 +89,28 @@ export class ArtistService {
           }
         });
     });
+  }
+
+  updateArtist(artist) {
+    return new Promise((resolve, reject) => {
+      const a = this.dbS.artistTable;
+      this.dbS.db.createTransaction().exec([
+        this.dbS.db.update(this.dbS.artistTable)
+        .set(a.spotifyImg, artist.spotifyImg)
+        .where(a.spotifyUri.eq(artist.spotifyUri))
+      ])
+      .then(updatedArtist => resolve(updatedArtist));
+    });
+  }
+
+  getArtistsToAddImgsAndTags(skip = 0, limit = 50) {
+    const a = this.dbS.artistTable;
+    return this.dbS.db.select()
+      .from(a)
+      .where(lf.op.and(a.spotifyUri.isNotNull()))
+      .skip(skip)
+      .limit(limit)
+      .exec();
   }
 
   getArtistByName(artistName) {

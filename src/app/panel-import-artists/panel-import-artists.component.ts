@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SpotifyService, ArtistService } from '../services';
 
 @Component({
@@ -13,14 +14,48 @@ export class PanelImportArtistsComponent implements OnInit {
   inFetching = false;
   fetchMessage;
 
-  constructor(private spotifyS: SpotifyService, private artistS: ArtistService) { }
+  constructor(private spotifyS: SpotifyService, private artistS: ArtistService, private router: Router) { }
 
   ngOnInit() {
     this.fetchMessage = 'Fetching saved albums artists';
-    this.fetchSavedAlbumsFromSpotify();
+    // this._fetchSavedAlbumsFromSpotify();
+    this._checkTokenInUrlParams();
   }
 
-  fetchSavedAlbumsFromSpotify(url = '') {
+  startImport() {
+    this._fetchSavedAlbumsFromSpotify();
+  }
+
+  addImgsAndTags(skip = 0, limit = 50) {
+    return new Promise(resolve => {
+      // retrieve 50 artists at time
+      this.artistS.getArtistsToAddImgsAndTags(skip, limit)
+        .then(artists => {
+          // Get spotify results
+          if (artists.length) {
+            const artistsIds = artists.map(artist => artist.spotifyUri.split(':')[2]);
+            // console.info(artistsIds);
+            this.spotifyS.getArtistsByIds(artistsIds)
+              .subscribe(spotifyArtists => {
+                console.log(spotifyArtists);
+                const artistsToBeUpdated = spotifyArtists.artists.map(artist => this.spotifyS.parseArtist(artist));
+                console.info(artistsToBeUpdated);
+
+                // Update the artists
+                artistsToBeUpdated.forEach(artist => {
+                  this.artistS.updateArtist(artist);
+                });
+
+                return this.addImgsAndTags(skip + limit);
+              });
+          } else {
+            resolve();
+          }
+        });
+    })
+  }
+
+  _fetchSavedAlbumsFromSpotify(url = '') {
     this.inFetching = true;
     this.spotifyS.getSavedAlbums(url)
       .subscribe(albums => {
@@ -36,21 +71,21 @@ export class PanelImportArtistsComponent implements OnInit {
         // this.artists.push([...artists]);
         if (albums.next) {
           setTimeout(() => {
-            this.fetchSavedAlbumsFromSpotify(albums.next);
-          }, 1000);
+            this._fetchSavedAlbumsFromSpotify(albums.next);
+          }, 500);
         } else {
           this.fetchProgress = 100;
           setTimeout(() => {
             this.fetchProgress = 0;
           }, 300);
           this.fetchMessage = 'Fetching saved tracks artists';
-          // this.fetchSavedTracksFromSpotify();
-          this._storeNewArtists();
+          this._fetchSavedTracksFromSpotify();
+          // this._storeNewArtists();
         }
       });
   }
 
-  fetchSavedTracksFromSpotify(url = '') {
+  _fetchSavedTracksFromSpotify(url = '') {
     this.spotifyS.getSavedTracks(url)
       .subscribe(tracks => {
         console.log(tracks);
@@ -65,8 +100,8 @@ export class PanelImportArtistsComponent implements OnInit {
         // this.artists.push([...artists]);
         if (tracks.next) {
           setTimeout(() => {
-            this.fetchSavedTracksFromSpotify(tracks.next);
-          }, 1000);
+            this._fetchSavedTracksFromSpotify(tracks.next);
+          }, 500);
         } else {
           setTimeout(() => {
             this.inFetching = false;
@@ -84,6 +119,35 @@ export class PanelImportArtistsComponent implements OnInit {
     this.artistsMap.forEach(artist => {
       console.log(artist);
       this.artistS.insertArtist(artist);
-    })
+    });
+    // Redirect to artist list
+    this.addImgsAndTags()
+      .then(() => {
+        this.router.navigate(['/artists']);
+      });
   }
+
+  _checkTokenInUrlParams() {
+    const currentUrl = window.location.href;
+    const i = currentUrl.indexOf('access_token=');
+    const j = currentUrl.indexOf('&token');
+    if (~i && ~j) {
+      const token = currentUrl.slice(i, j).replace('access_token=', '');
+      window.localStorage.setItem('spotify-token', token);
+      this._fetchSavedAlbumsFromSpotify();
+    } else {
+      this._checkForValidToken();
+    }
+  }
+
+  _checkForValidToken() {
+    const token = window.localStorage.getItem('spotify-token');
+    if (!token) {
+      // Redirect to spotify login page
+      this.spotifyS.authenticateUser();
+    } else {
+      this.fetchMessage = 'You are logged on spotify';
+    }
+  }
+
 }

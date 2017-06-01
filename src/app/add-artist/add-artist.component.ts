@@ -82,15 +82,7 @@ export class AddArtistComponent implements OnInit {
     if (response.artists.length === 0) {
       return;
     }
-    const ret = response.artists.items.map(artist => {
-      const imgIndex =  (artist.images.length) ? artist.images.length - 1 : -1;
-      return {
-        name: artist.name.charAt(0).toUpperCase() + artist.name.slice(1),
-        tags: artist.genres.map(tag => ({ name: tag, selected: false })),
-        spotifyImg: (imgIndex >= 0) ? artist.images[imgIndex].url : '',
-        spotifyUri: artist.uri
-      };
-    });
+    const ret = response.artists.items.map(artist => this.spotifyS.parseArtist(artist));
     return ret;
   }
 }
