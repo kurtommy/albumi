@@ -42,8 +42,8 @@ export class SpotifyService {
   authenticateUser() {
     const authUrl = 'https://accounts.spotify.com/authorize';
     const clientId = 'c4848b2344434546a34103f23438226b';
-    const redirectUri = 'http://localhost:4200/import-artists';
     const scopes = 'playlist-read-private user-library-read user-read-email';
+    const redirectUri = window.location.href;
     const url = `${authUrl}?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
     window.location.href = url;
   }
