@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 
@@ -8,9 +8,10 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./alphabet.component.scss']
 })
 export class AlphabetComponent implements OnInit {
+  @Input() initChar;
   @Output() newChar = new EventEmitter();
   debouncer = new Subject();
-  selectedChar = 'A';
+  selectedChar;
   alphabet;
 
   constructor() {
@@ -19,8 +20,8 @@ export class AlphabetComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.selectedChar = this.initChar || 'A';
     this.debouncer.debounceTime(200).subscribe((char: any) => {
-      // console.info(char);
       this.selectedChar = char;
       this.newChar.emit({ char });
     });

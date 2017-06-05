@@ -49,7 +49,7 @@ export class SpotifyService {
   }
 
   parseArtist(artist) {
-    const imgIndex =  (artist.images.length) ? artist.images.length - 1 : -1;
+    const imgIndex = (artist.images.length) ? artist.images.length - 1 : -1;
     return {
       name: artist.name.charAt(0).toUpperCase() + artist.name.slice(1),
       tags: artist.genres.map(tag => ({ name: tag, selected: false })),

@@ -1,10 +1,10 @@
 <div class="tags-wrapper">
   <md-chip-list class="">
-    <md-chip *ngFor="let tag of tags"
-        selected="tag.selected"
-        color="{{(tag.selected) ? 'accent' : ''}}"
-        (click)="toggleTags(tag)">
+    <md-chip *ngFor="let tag of tagS?.availableTags"
+        [selected]="isSelected(tag)"
+        (click)="toggleTag(tag)">
       {{tag.name}}
+      <!--- {{tag.count}}-->
     </md-chip>
   </md-chip-list>
 </div>

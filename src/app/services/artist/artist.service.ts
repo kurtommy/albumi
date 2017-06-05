@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { DbService, TagService } from '../index';
+import { DbService } from '../index';
 import * as lf from 'lovefield';
 
 @Injectable()
 export class ArtistService {
+  public betweenChars = ['A', 'B'];
 
   constructor(private dbS: DbService) { }
 
-  getArtists(options) {
+   async getArtists(options) {
     return new Promise((resolve) => {
       const a = this.dbS.artistTable;
       const t = this.dbS.tagTable;
@@ -39,6 +40,8 @@ export class ArtistService {
         if (options.tags.length) {
           artists = artists.map(artist => artist.Artist);
         }
+        // TODO find a better way to remove duplicates
+        artists = artists.filter((artist, index, self) => index === self.indexOf(artist));
         console.info(artists);
         console.log(artists.length);
         resolve(artists);
@@ -94,12 +97,25 @@ export class ArtistService {
   updateArtist(artist) {
     return new Promise((resolve, reject) => {
       const a = this.dbS.artistTable;
-      this.dbS.db.createTransaction().exec([
-        this.dbS.db.update(this.dbS.artistTable)
-        .set(a.spotifyImg, artist.spotifyImg)
-        .where(a.spotifyUri.eq(artist.spotifyUri))
-      ])
-      .then(updatedArtist => resolve(updatedArtist));
+      // Add spotifyImgs
+      const q = this.dbS.db.update(this.dbS.artistTable);
+        if (artist.spotifyImg) {
+          q.set(a.spotifyImg, artist.spotifyImg);
+        }
+        q.where(a.id.eq(artist.id))
+        .exec()
+        .then(updatedArtist => {
+          // Update tags
+          // console.info(updatedArtist);
+          this.getArtistBySpotifyUri(artist.spotifyUri)
+            .then(artist => {
+              // console.info(artist);
+              resolve(artist[0]);
+            });
+          // this.tagS.insertTags(updatedArtist.generes);
+          // Remove all artist tags
+          // Link tags
+        });
     });
   }
 
@@ -120,23 +136,30 @@ export class ArtistService {
       .exec();
   }
 
+  getArtistBySpotifyUri(spotifyUri) {
+    return this.dbS.db.select()
+      .from(this.dbS.artistTable)
+      .where(this.dbS.artistTable.spotifyUri.eq(spotifyUri))
+      .exec();
+  }
+
   linkTags(artist, tags) {
     // Get all tags for the artist
     const tagsIds = tags.map(tag => tag.id);
     this.dbS.db.select()
-        .from(this.dbS.tagArtistTable)
-        .where(lf.op.and(
-            this.dbS.tagArtistTable.artistId.eq(artist.id),
-            this.dbS.tagArtistTable.tagId.in(tagsIds)))
-        .exec()
-        .then(tagsLinked => {
-          console.log('tagsLinked', tagsLinked);
-          // Filter tags to be added
-          const tagsToAdd = tags.filter(tag => !tagsLinked.find(t => t.tagId === tag.id));
-          if (tagsToAdd.length) {
-            this._addTags(artist, tagsToAdd);
-          }
-        });
+      .from(this.dbS.tagArtistTable)
+      .where(lf.op.and(
+          this.dbS.tagArtistTable.artistId.eq(artist.id),
+          this.dbS.tagArtistTable.tagId.in(tagsIds)))
+      .exec()
+      .then(tagsLinked => {
+        console.log('tagsLinked', tagsLinked);
+        // Filter tags to be added
+        const tagsToAdd = tags.filter(tag => !tagsLinked.find(t => t.tagId === tag.id));
+        if (tagsToAdd.length) {
+          this._addTags(artist, tagsToAdd);
+        }
+      });
   }
 
   _addTags(artist, tags) {

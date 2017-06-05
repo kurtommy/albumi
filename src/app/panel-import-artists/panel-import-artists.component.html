@@ -1,14 +1,26 @@
-{{fetchMessage}}
+<div>
+  {{fetchMessage}}
+</div>
+
 <md-progress-bar
     *ngIf="inFetching"
     [mode]="'determinate'"
     [value]="fetchProgress">
 </md-progress-bar>
 
+<div *ngIf="!showGoToArtistButton">
+  <button type="button" md-raised-button (click)="startImport()">
+    Start to import
+  </button>
+</div>
 
-<button type="button" md-raised-button (click)="startImport()">
-  Start to import
-</button>
-<button type="button" md-raised-button (click)="addImgsAndTags()">
-  Add imgs and tags
+<div *ngIf="showGoToArtistButton">
+  <button type="button" md-raised-button [routerLink]="['/artists']">
+    Go to Artists
+  </button>
+</div>
+
+<br><br><br>
+<button type="button" md-raised-button (click)="deleteDb()">
+  Delete DB
 </button>

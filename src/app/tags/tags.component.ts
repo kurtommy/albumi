@@ -15,25 +15,29 @@ export class TagsComponent implements OnInit {
 
   ngOnInit() {
     // Fetch all tags
-    this.obs.push(
-      this.dbS.dbConnection.subscribe((db) => {
-        this.tagS.getAllTags()
-          .then((tags: any) => {
-            this.tags = tags.map((t) => ({
-              id: t.id,
-              name: t.name,
-              selected: false
-            }));
-          });
-      })
-    );
+    // this.obs.push(
+    //   this.dbS.dbConnection.subscribe((db) => {
+    //     this.tagS.getAllTags()
+    //       .then((tags: any) => {
 
+    //       });
+    //   })
+    // );
   }
 
-  toggleTags(tag) {
-    tag.selected = !tag.selected;
-    const selectedTags = this.tags.filter(f => f.selected);
-    this.onTagsChange.emit({ tags: selectedTags });
+  toggleTag(tag) {
+    const selectedTagIndex = this.tagS.activeTags.findIndex(t => t.id === tag.id);
+    if (~selectedTagIndex) {
+      this.tagS.activeTags.splice(selectedTagIndex, 1);
+    } else {
+      this.tagS.activeTags.push(tag);
+    }
+    this.onTagsChange.emit({});
+  }
+
+  isSelected(tag) {
+    // console.info(tag);
+    return this.tagS.activeTags.find(t => t.id === tag.id);
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DbService, ArtistService } from '../services/index';
+import { DbService, ArtistService, TagService } from '../services/index';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 
@@ -13,16 +13,15 @@ export class PanelArtistsListComponent implements OnInit {
   obs = [];
   showTags = false;
   selectedTags = [];
-  betweenChars = ['A', 'B'];
 
-  constructor(private dbS: DbService, private artistS: ArtistService, public dialog: MdDialog) { }
+  constructor(private dbS: DbService, public artistS: ArtistService, public tagS: TagService, public dialog: MdDialog) { }
 
   ngOnInit() {
     this.obs.push(
       this.dbS.dbConnection.subscribe((db) => {
         this._updateArtistsList()
           .then(artists => {
-            console.log(artists);
+            // console.log(artists);
             // this.artistsList = artists
           });
       })
@@ -30,20 +29,17 @@ export class PanelArtistsListComponent implements OnInit {
   }
 
   selectChar(obj) {
+    console.info('sc', obj);
     const char: string = obj.char;
     if (char === 'All') {
-      this.betweenChars = [];
+      this.artistS.betweenChars = [];
     } else {
-      this.betweenChars = [char , this._getNextChar(char)];
+      this.artistS.betweenChars = [char , this._getNextChar(char)];
     }
     this._updateArtistsList();
   }
 
-  updateTagsFilter(obj) {
-    console.log(obj);
-    this.selectedTags = obj.tags;
-    this._updateArtistsList();
-  }
+
 
 
   confirmDeleteArtist(artist) {
@@ -62,11 +58,22 @@ export class PanelArtistsListComponent implements OnInit {
       });
   }
 
-  _updateArtistsList() {
-    return this.artistS.getArtists({
-        tags: this.selectedTags,
-        betweenChars: this.betweenChars
-      }).then(artists => this.artistsList = artists);
+  onTagsChange() {
+    this._updateArtistsList();
+  }
+
+  removeTag(tag) {
+    const selectedTagIndex = this.tagS.activeTags.findIndex(t => t.id === tag.id);
+    this.tagS.activeTags.splice(selectedTagIndex, 1);
+    this._updateArtistsList();
+  }
+
+  async _updateArtistsList() {
+    this.artistsList = await this.artistS.getArtists({
+        tags: this.tagS.activeTags,
+        betweenChars: this.artistS.betweenChars
+      });
+    this.tagS.updateAvailableTags(this.artistsList);
   }
 
   _getNextChar(char) {
