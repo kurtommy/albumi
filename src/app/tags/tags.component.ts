@@ -10,8 +10,11 @@ export class TagsComponent implements OnInit {
   @Output() onTagsChange = new EventEmitter();
   obs = [];
   tags;
+  tagS;
 
-  constructor(private tagS: TagService, private dbS: DbService) { }
+  constructor(tagS: TagService, private dbS: DbService) {
+    this.tagS = tagS;
+   }
 
   ngOnInit() {
     // Fetch all tags
