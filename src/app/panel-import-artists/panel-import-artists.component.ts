@@ -137,8 +137,8 @@ export class PanelImportArtistsComponent implements OnInit {
           .subscribe((spotifyArtist) => {
             this.fetchProgress = Math.ceil(i / artistsLen * 100);
             if (spotifyArtist.artists.items && spotifyArtist.artists.items.length) {
+              const tags = this._clusterizeTags(spotifyArtist.artists.items[0].genres);
               const newArtist: any = this.spotifyS.parseArtist(spotifyArtist.artists.items[0]);
-              const tags = this._clusterizeTags(newArtist.genres);
               this.artistS.insertArtist(newArtist)
                 .then(artist => {
                   if (tags.length) {
