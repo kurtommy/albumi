@@ -88,7 +88,7 @@ export class TagService {
         .orderBy(t.name, lf.Order.ASC)
         .exec()
         .then(results => {
-          // results = results.sort((prev, next) => next.count - prev.count);
+          results = results.sort((prev, next) => next.count - prev.count);
           // console.info(results);
           resolve(this._mapUiTags(results));
         });

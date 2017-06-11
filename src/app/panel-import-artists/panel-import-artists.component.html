@@ -10,9 +10,13 @@
 
 <div *ngIf="!showGoToArtistButton">
   <button type="button" md-raised-button (click)="startImport()">
-    Start to import
+    Import from spotify
   </button>
 </div>
+
+<button type="button" md-raised-button (click)="importFromJson()">
+  Import from json
+</button>
 
 <div *ngIf="showGoToArtistButton">
   <button type="button" md-raised-button [routerLink]="['/artists']">

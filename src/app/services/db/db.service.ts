@@ -58,7 +58,7 @@ export class DbService {
       .addColumn('id', lf.Type.INTEGER).addPrimaryKey(['id'], true)
       .addColumn('name', lf.Type.STRING)
       .addColumn('spotifyUri', lf.Type.STRING)
-      .addUnique('spotifyUriUnique', ['spotifyUri'])
+      // .addUnique('spotifyUriUnique', ['spotifyUri'])
       .addColumn('spotifyImg', lf.Type.STRING)
       .addNullable(['spotifyUri', 'spotifyImg']);
 
