@@ -40,7 +40,7 @@ export class PanelImportArtistsComponent implements OnInit {
 
   async importFromJson() {
      this.http
-      .get(`/assets/data/artists.json`)
+      .get(`assets/data/artists.json`)
       .map(response => response.json())
       .subscribe(artists => {
         console.info(artists);
