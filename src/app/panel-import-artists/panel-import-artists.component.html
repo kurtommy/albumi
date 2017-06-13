@@ -24,6 +24,15 @@
   </button>
 </div>
 
+
+<br><br><br>
+<button type="button" md-raised-button (click)="exportDb()">
+  Export DB
+</button>
+<br>
+Import
+<input type="file" (change)="importDb($event)">
+
 <br><br><br>
 <button type="button" md-raised-button (click)="deleteDb()">
   Delete DB

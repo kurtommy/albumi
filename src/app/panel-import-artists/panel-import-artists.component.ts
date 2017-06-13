@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
-import { SpotifyService, ArtistService, TagService } from '../services';
+import { SpotifyService, ArtistService, TagService, DbService } from '../services';
 
 @Component({
   selector: 'app-panel-import-artists',
@@ -17,7 +17,7 @@ export class PanelImportArtistsComponent implements OnInit {
   fetchMessage;
 
   constructor(private spotifyS: SpotifyService, private artistS: ArtistService, private tagS: TagService,
-      private router: Router, private http: Http) { }
+      private router: Router, private http: Http, private dbS: DbService) { }
 
   ngOnInit() {
     this._checkTokenInUrlParams();
@@ -25,6 +25,31 @@ export class PanelImportArtistsComponent implements OnInit {
 
   deleteDb() {
     indexedDB.deleteDatabase('albumi');
+  }
+
+  exportDb() {
+    this.dbS.db.export().then(function(data) {
+      console.log(data);
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data));
+      const linkEl = document.createElement('a');
+      document.body.appendChild(linkEl);
+      linkEl.setAttribute('href', dataStr);
+      linkEl.setAttribute('download', 'albumi-db.json');
+      linkEl.click();
+    });
+  }
+
+  importDb(input) {
+     const reader = new FileReader();
+     reader.readAsText(input.target.files[0], 'UTF8');
+     reader.onload = (evt: any) => {
+       if (evt.target.result) {
+        this.fetchMessage = 'Start importing DB';
+        this.dbS.db.import(JSON.parse(evt.target.result)).then(() => {
+          this.fetchMessage = 'DB imported correctly';
+        });
+      };
+     };
   }
 
   async startImport() {
@@ -46,7 +71,7 @@ export class PanelImportArtistsComponent implements OnInit {
         console.info(artists);
         this.artists = artists;
         this.artists = this.artists.map(artist => artist.name);
-        this._fetchAdnSaveSpotyfyArtists()
+        this._fetchAndSaveSpotyfyArtists()
           .then(() => {
             this.fetchMessage = `Artists added to your DB`;
             this.fetchProgress = 100;
@@ -128,7 +153,7 @@ export class PanelImportArtistsComponent implements OnInit {
     return Promise.all(promises);
   }
 
-  async _fetchAdnSaveSpotyfyArtists() {
+  async _fetchAndSaveSpotyfyArtists() {
     const artistsLen = this.artists.length;
     return new Promise((resolve) => {
       const fetch = (i = 0) => {
@@ -148,7 +173,9 @@ export class PanelImportArtistsComponent implements OnInit {
                       });
                   }
                   if (i < artistsLen - 1) {
-                    fetch(i + 1);
+                    setTimeout(() => {
+                      fetch(i + 1);
+                    }, 200);
                   } else {
                     resolve();
                   }
@@ -244,7 +271,7 @@ export class PanelImportArtistsComponent implements OnInit {
     });
   }
 
-    _checkTokenInUrlParams() {
+  _checkTokenInUrlParams() {
     const currentUrl = window.location.href;
     const i = currentUrl.indexOf('access_token=');
     const j = currentUrl.indexOf('&token');
