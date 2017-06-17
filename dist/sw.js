@@ -18,6 +18,7 @@ importScripts('workbox-sw.prod.v1.0.1.js');
  * accordingly.
  */
 const fileManifest = [
+
   {
     "url": "/albumi/assets/data/artists.json",
     "revision": "86f1de4ebf89c118cc397670d05236b3"
@@ -32,7 +33,7 @@ const fileManifest = [
   },
   {
     "url": "/albumi/index.html",
-    "revision": "61ecb62113c51c1a3d023d4d6ac44ec4"
+    "revision": "fccd93990d0f3c7c321a1141f2f5cc3f"
   },
   {
     "url": "/albumi/inline.9c63c12eaa15dd0bf387.bundle.js",
