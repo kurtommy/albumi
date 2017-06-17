@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ghpages": "git add . && git commit -m 'asd' && git subtree push --prefix dist github gh-pages",
-    "precache": "sw-precache --verbose --config=sw-precache-config.js",
+    "precache": "workbox-cli generate:sw",
     "deploy": "npm run build && npm run precache && npm run ghpages"
   },
   "private": true,
