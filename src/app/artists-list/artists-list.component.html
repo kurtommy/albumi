@@ -3,7 +3,7 @@
     <md-icon *ngIf="!item.Artist.spotifyImg" md-list-icon>note</md-icon>
     <img *ngIf="item.Artist.spotifyImg" [src]="item.Artist.spotifyImg"/>
     <h4>{{item.Artist.name}}</h4>
-    <button md-button (click)="toggleFavourite(item.Artist)">
+    <button md-button (click)="toggleFavourite(item)">
       <md-icon *ngIf="!item.Favourite.id">favorite_border</md-icon>
       <md-icon *ngIf="item.Favourite.id">favorite</md-icon>
     </button>

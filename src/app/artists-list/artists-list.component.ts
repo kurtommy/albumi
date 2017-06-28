@@ -20,9 +20,8 @@ export class ArtistsListComponent implements OnInit {
     console.info(this.list);
   }
 
-  toggleFavourite(artist) {
-    console.log(artist);
-    this.favouriteS.toggle(artist);
+  toggleFavourite(favourite) {
+    this.favouriteS.toggle(favourite);
   }
 
   deleteArtist(artist) {

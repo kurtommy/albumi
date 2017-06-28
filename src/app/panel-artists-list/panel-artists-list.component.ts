@@ -40,8 +40,6 @@ export class PanelArtistsListComponent implements OnInit {
   }
 
 
-
-
   confirmDeleteArtist(artist) {
     const dialog = this.dialog.open(DeleteArtistDialog, { data: artist });
     dialog.afterClosed().subscribe(artistToDelete => {

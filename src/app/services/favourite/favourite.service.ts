@@ -20,17 +20,17 @@ export class FavouriteService {
     });
   }
 
-  async toggle(artist) {
-    if (artist.Favourite.id) {
-      this._removeArtist(artist);
+  async toggle(item) {
+    if (item.Favourite.id) {
+      this._removeArtist(item);
     } else {
-      this._addArtist(artist);
+      this._addArtist(item);
     }
   }
 
-  _addArtist(artist) {
+  _addArtist(item) {
     const newFavourite = {
-      artistId: artist.id
+      artistId: item.Artist.id
     };
     return this.dbS.db.createTransaction().exec([
       this.dbS.db.insert().into(this.dbS.favouriteTable).values([
@@ -39,10 +39,10 @@ export class FavouriteService {
     ]);
   }
 
-  _removeArtist(artist) {
+  _removeArtist(item) {
     return this.dbS.db.delete()
       .from(this.dbS.f)
-      .where(this.dbS.f.id.eq(artist.Favourite.id))
+      .where(this.dbS.f.id.eq(item.Favourite.id))
       .exec();
   }
 }
