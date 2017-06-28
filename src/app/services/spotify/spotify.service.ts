@@ -59,7 +59,8 @@ export class SpotifyService {
   }
 
   _setRequestBearer() {
-    const token = window.localStorage.getItem('spotify-token');
+    const tokenPayload = window.localStorage.getItem('spotify-token');
+    const token = JSON.parse(tokenPayload).token;
     // const token = 'BQBlCpFvu1OSxKne80MaXGSItyQYhvvPLvUGlyZr70L9cjc7CSfQdsMjcuuSfOfvt3DhM8zXuUxpflZDok5wa9sTWGFmyajEWjmfjFn1u0BNp_skZ61psyotx9cKj1X8mGoONrUDRajUf44';
     const headers = new Headers({ 'Accept': 'application/json' });
     headers.append('Authorization', `Bearer ${token}`);

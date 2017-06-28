@@ -1,8 +1,12 @@
 <md-list>
-  <md-list-item *ngFor="let artist of list">
-    <md-icon *ngIf="!artist.spotifyImg" md-list-icon>note</md-icon>
-    <img *ngIf="artist.spotifyImg" [src]="artist.spotifyImg"/>
-    <h4>{{artist.name}}</h4>
-    <app-artist-menu [artist]="artist" (onDelete)="deleteArtist($event)"></app-artist-menu>
+  <md-list-item *ngFor="let item of list">
+    <md-icon *ngIf="!item.Artist.spotifyImg" md-list-icon>note</md-icon>
+    <img *ngIf="item.Artist.spotifyImg" [src]="item.Artist.spotifyImg"/>
+    <h4>{{item.Artist.name}}</h4>
+    <button md-button (click)="toggleFavourite(item.Artist)">
+      <md-icon *ngIf="!item.Favourite.id">favorite_border</md-icon>
+      <md-icon *ngIf="item.Favourite.id">favorite</md-icon>
+    </button>
+    <app-artist-menu [artist]="item.Artist" (onDelete)="deleteArtist($event)"></app-artist-menu>
   </md-list-item>
 </md-list>

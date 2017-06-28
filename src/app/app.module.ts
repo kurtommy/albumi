@@ -28,6 +28,7 @@ import { PanelAddArtistComponent } from './panel-add-artist/panel-add-artist.com
 import { PanelArtistsListComponent, DeleteArtistDialog } from './panel-artists-list/panel-artists-list.component';
 import { TagsComponent } from './tags/tags.component';
 import { PanelImportArtistsComponent } from './panel-import-artists/panel-import-artists.component';
+import { PanelFavouritesComponent } from './panel-favourites/panel-favourites.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { PanelImportArtistsComponent } from './panel-import-artists/panel-import
     PanelArtistsListComponent,
     TagsComponent,
     DeleteArtistDialog,
-    PanelImportArtistsComponent
+    PanelImportArtistsComponent,
+    PanelFavouritesComponent
   ],
   entryComponents: [
     DeleteArtistDialog
@@ -73,7 +75,8 @@ import { PanelImportArtistsComponent } from './panel-import-artists/panel-import
     services.DbService,
     services.SpotifyService,
     services.ArtistService,
-    services.TagService
+    services.TagService,
+    services.FavouriteService
   ],
   bootstrap: [AppComponent]
 })

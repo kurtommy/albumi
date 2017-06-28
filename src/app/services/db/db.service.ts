@@ -6,9 +6,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 @Injectable()
 export class DbService {
   db;
-  artistTable;
-  tagTable;
-  tagArtistTable;
+  artistTable; a;
+  tagTable; t;
+  tagArtistTable; ta;
+  favouriteTable; f;
   dbConnection = new ReplaySubject();
   schemaBuilder: lf.schema.Builder;
 
@@ -82,15 +83,26 @@ export class DbService {
         action: lf.ConstraintAction.CASCADE,
         timing: lf.ConstraintTiming.IMMEDIATE
       });
+
+    this.schemaBuilder.createTable('Favourite')
+      .addColumn('id', lf.Type.INTEGER).addPrimaryKey(['id'], true)
+      .addColumn('artistId', lf.Type.INTEGER)
+      .addForeignKey('artistIdFk', {
+        local: 'artistId',
+        ref: 'Artist.id',
+        action: lf.ConstraintAction.CASCADE,
+        timing: lf.ConstraintTiming.IMMEDIATE
+      });
     // console.info(this.schemaBuilder.getSchema().tables());
   }
 
   _connectToDb() {
     return this.schemaBuilder.connect({ storeType: lf.schema.DataStoreType.INDEXED_DB }).then((db) => {
       this.db = db;
-      this.artistTable = this.db.getSchema().table('Artist');
-      this.tagTable = this.db.getSchema().table('Tag');
-      this.tagArtistTable = this.db.getSchema().table('TagArtist');
+      this.artistTable = this.a = this.db.getSchema().table('Artist');
+      this.tagTable = this.t = this.db.getSchema().table('Tag');
+      this.tagArtistTable = this.ta = this.db.getSchema().table('TagArtist');
+      this.favouriteTable = this.f = this.db.getSchema().table('Favourite');
     });
   }
 

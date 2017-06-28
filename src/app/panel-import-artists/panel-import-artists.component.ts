@@ -277,7 +277,8 @@ export class PanelImportArtistsComponent implements OnInit {
     const j = currentUrl.indexOf('&token');
     if (~i && ~j) {
       const token = currentUrl.slice(i, j).replace('access_token=', '');
-      window.localStorage.setItem('spotify-token', token);
+      const tokenPayload = { token, expireDate: Date.now() }
+      window.localStorage.setItem('spotify-token', JSON.stringify(tokenPayload));
       this.fetchMessage = 'You are logged on Spotify';
     } else {
       this._checkForValidToken();
@@ -285,14 +286,19 @@ export class PanelImportArtistsComponent implements OnInit {
   }
 
   _checkForValidToken() {
-    const token = window.localStorage.getItem('spotify-token');
-    console.info('token', token);
-    if (!token) {
+    const tokenPayload = window.localStorage.getItem('spotify-token');
+    if (!tokenPayload) {
       // Redirect to spotify login page
       this.spotifyS.authenticateUser();
-    } else {
-      this.fetchMessage = 'You are logged on Spotify';
+      return;
     }
+    const token = JSON.parse(tokenPayload);
+    if (token.expireDate < Date.now() - 28 * 60 * 1000) {
+      this.spotifyS.authenticateUser();
+      return;
+    }
+    console.info('token', tokenPayload);
+    this.fetchMessage = 'You are logged on Spotify';
   }
 
   _clusterizeTags(tags) {

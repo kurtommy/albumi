@@ -10,9 +10,10 @@ export class ArtistService {
 
    async getArtists(options) {
     return new Promise((resolve) => {
-      const a = this.dbS.artistTable;
-      const t = this.dbS.tagTable;
-      const ta = this.dbS.tagArtistTable;
+      const a = this.dbS.a;
+      const t = this.dbS.t;
+      const ta = this.dbS.ta;
+      const f = this.dbS.f;
 
       const q = this.dbS.db.select();
       if (options.tags.length) {
@@ -20,7 +21,7 @@ export class ArtistService {
       } else {
         q.from(a);
       }
-
+      q.leftOuterJoin(f, a.id.eq(f.artistId));
       // Handle where contitions
       const whereConditions = [];
       if (options.betweenChars.length) {
