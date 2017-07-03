@@ -36,7 +36,7 @@ const fileManifest = [
   },
   {
     "url": "/albumi/index.html",
-    "revision": "a55d5d6543dda3d51e97bfb06ae92cea"
+    "revision": "3c4e17352ce0da597339e44cb4aa1946"
   },
   {
     "url": "/albumi/inline.dc866d56617442c841fd.bundle.js",
