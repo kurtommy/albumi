@@ -19,43 +19,43 @@ importScripts('workbox-sw.prod.v1.0.1.js');
  */
 const fileManifest = [
   {
-    "url": "/404.html",
+    "url": "/albumi/404.html",
     "revision": "a8ac6c99ac3d78bec287b4e15c6ccd82"
   },
   {
-    "url": "/assets/data/artists.json",
+    "url": "/albumi/assets/data/artists.json",
     "revision": "86f1de4ebf89c118cc397670d05236b3"
   },
   {
-    "url": "/assets/lists/names.json",
+    "url": "/albumi/assets/lists/names.json",
     "revision": "55360ec457cf0d0eee4c113e6b30a44a"
   },
   {
-    "url": "/favicon.ico",
+    "url": "/albumi/favicon.ico",
     "revision": "b9aa7c338693424aae99599bec875b5f"
   },
   {
-    "url": "/index.html",
+    "url": "/albumi/index.html",
     "revision": "93dea94911e953d39898d68534c1d5df"
   },
   {
-    "url": "/inline.b6ddc04d2e88d597043e.bundle.js",
+    "url": "/albumi/inline.b6ddc04d2e88d597043e.bundle.js",
     "revision": "00bbc10bd522904ba0d37d40ac72f819"
   },
   {
-    "url": "/main.5706f986e8249a2b6bea.bundle.js",
+    "url": "/albumi/main.5706f986e8249a2b6bea.bundle.js",
     "revision": "2fc24950b9be4a1646b8dc3f509c2baa"
   },
   {
-    "url": "/polyfills.39c939ce6d269d8796c3.bundle.js",
+    "url": "/albumi/polyfills.39c939ce6d269d8796c3.bundle.js",
     "revision": "d4be978c966a239dbf98f53b360807b4"
   },
   {
-    "url": "/styles.37cf96475c27c17f27ee.bundle.css",
+    "url": "/albumi/styles.37cf96475c27c17f27ee.bundle.css",
     "revision": "404786c18573fcedf91eb684c532f265"
   },
   {
-    "url": "/vendor.aa7e60881ccaf7cebea2.bundle.js",
+    "url": "/albumi/vendor.aa7e60881ccaf7cebea2.bundle.js",
     "revision": "2ffc11c87e58a19d65731f8de7ee63c5"
   }
 ];
